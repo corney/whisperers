@@ -6,4 +6,5 @@ package ru.corney.whisperers
 object Message {
   case object Whisper
   case object Tick
+  case object Purge
 }
