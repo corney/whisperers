@@ -1,8 +1,8 @@
-package ru.corney.whisperers
+package ru.corney.whisperers.whisperer
 
 import akka.actor.{ActorContext, ActorPath, ActorRef, ActorSelection, RootActorPath}
 import akka.cluster.Member
-import ru.corney.whisperers.Message.Whisper
+import ru.corney.whisperers.whisperer.Message.Whisper
 
 /**
   * Created by corney on 14.10.16.

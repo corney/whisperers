@@ -13,6 +13,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-testkit" % akkaVersion,
   "com.typesafe.akka" %% "akka-cluster" % akkaVersion,
   "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
+  "com.github.scopt" %% "scopt" % "3.5.0",
   "ch.qos.logback" % "logback-classic" % "1.1.7",
   "org.specs2" %% "specs2-core" % "3.8.5" % "test"
 )

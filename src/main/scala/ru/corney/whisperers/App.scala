@@ -1,9 +1,7 @@
 package ru.corney.whisperers
 
-import akka.actor.{ActorSystem, Props}
-import ch.qos.logback.classic.LoggerContext
-import com.typesafe.config.ConfigFactory
-import org.slf4j.{LoggerFactory, MDC}
+import ru.corney.whisperers.manager.{DelayManager, MetricsManager, RemoveWhisperersManager, ScheduleWhisperersManager}
+import ru.corney.whisperers.whisperer.Whisperer
 
 /**
   * Created by user on 10/14/16.
@@ -11,24 +9,28 @@ import org.slf4j.{LoggerFactory, MDC}
 object App {
   def main(args: Array[String]): Unit = {
 
+    Config.get(args) match {
+      case Some(config) =>
+        if (config.numWhisperers > 0)
+          Whisperer.launchWhisperers(config.numWhisperers)
+        else {
+          if (config.askForMetrics)
+            MetricsManager.askForMetrics()
 
+          if (config.scheduleWhisperers > 0)
+            ScheduleWhisperersManager.schedule(config.scheduleWhisperers)
+          else if (config.removeWhispers > 0)
+            RemoveWhisperersManager.remove(config.removeWhispers)
 
-    if (args.isEmpty) {
-      startup(Seq("2551", "2552", "0"))
-    } else
-      startup(args)
-  }
-
-  def startup(ports: Seq[String]): Unit = {
-    ports foreach { port =>
-
-      val config = ConfigFactory.parseString("akka.remote.netty.tcp.port=" + port).
-        withFallback(ConfigFactory.load())
-
-      val system = ActorSystem("WhispererCluster", config)
-
-      system.actorOf(Props[Whisperer], name = Whisperer.Name)
+          config.delay match {
+            case Some(delay) =>
+              DelayManager.setDelay(delay)
+            case None =>
+            //
+          }
+        }
+      case None =>
+      // Do nothing
     }
   }
-
 }
